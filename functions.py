@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import scipy.stats as sp
 import re
+import librosa
 
 def load_data_index(data_path: str, bearing: int, index: int):
     index_file_path = f'{data_path}/{index}.csv'
@@ -17,7 +18,7 @@ def get_features(df: str):
     kurtosis = [sp.kurtosis(df.iloc[:,0]), sp.kurtosis(df.iloc[:,1])]
     variance = [df.iloc[:, 0].var(), df.iloc[:, 1].var()]
     crest_factor = [np.max(np.abs(df.iloc[:, 0])) / rms[0], np.max(np.abs(df.iloc[:, 1])) / rms[1]]
-    
+    spectral_flatness_values = [librosa.feature.spectral_flatness(y=df.iloc[:, 0]), librosa.feature.spectral_flatness(y=df.iloc[:, 1])]
     return mean + std + rms + kurtosis + variance + crest_factor
 
 
