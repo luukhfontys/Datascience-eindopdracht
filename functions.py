@@ -19,9 +19,9 @@ def get_features(df: str):
     variance = [df.iloc[:, 0].var(), df.iloc[:, 1].var()]
     crest_factor = [np.max(np.abs(df.iloc[:, 0])) / rms[0], np.max(np.abs(df.iloc[:, 1])) / rms[1]]
     skewness = [sp.skew(df.iloc[:,0]), sp.skew(df.iloc[:,1])]
-    spectral_flatness_values = [librosa.feature.spectral_flatness(y=df.iloc[:, 0]), librosa.feature.spectral_flatness(y=df.iloc[:, 1])]
+    spectral_flatness_values = [librosa.feature.spectral_flatness(y=np.array(df.iloc[:, 0])), librosa.feature.spectral_flatness(y=np.array(df.iloc[:, 1]))]
     
-    return mean + std + rms + kurtosis + variance + crest_factor + skewness
+    return mean + std + rms + kurtosis + variance + crest_factor + skewness + spectral_flatness_values
 
 
 
