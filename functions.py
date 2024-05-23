@@ -21,5 +21,4 @@ def get_features(df: str):
 
 
 df = load_data_index('train', 1, 0)
-test = get_features(df)
 x=1
