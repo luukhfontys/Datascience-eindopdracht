@@ -11,6 +11,14 @@ def load_data_index(data_path: str, bearing: int, index: int):
     df_csv_filtered = df_csv[[col for col in df_csv.columns if str(bearing) in col]]
     return df_csv_filtered
 
+def spectral_flatness(x):
+    fft_spectrum = np.fft.fft(x)
+    power_specturm = np.abs(fft_spectrum)**2
+
+    Geometric_mean = sqr
+
+
+
 def get_features(df: str):
     mean = [df.iloc[:, 0].mean(), df.iloc[:, 1].mean()]
     std = [df.iloc[:, 0].std(), df.iloc[:, 1].std()]
@@ -19,7 +27,7 @@ def get_features(df: str):
     variance = [df.iloc[:, 0].var(), df.iloc[:, 1].var()]
     crest_factor = [np.max(np.abs(df.iloc[:, 0])) / rms[0], np.max(np.abs(df.iloc[:, 1])) / rms[1]]
     skewness = [sp.skew(df.iloc[:,0]), sp.skew(df.iloc[:,1])]
-    spectral_flatness_values = [librosa.feature.spectral_flatness(y=df.iloc[:, 0]), librosa.feature.spectral_flatness(y=df.iloc[:, 1])]
+    #spectral_flatness_values = [librosa.feature.spectral_flatness(y=df.iloc[:, 0]), librosa.feature.spectral_flatness(y=df.iloc[:, 1])]
     
     return mean + std + rms + kurtosis + variance + crest_factor + skewness
 
@@ -30,4 +38,3 @@ df = load_data_index('train', 1, 0)
 
 print(get_features(df))
 
-x=1
