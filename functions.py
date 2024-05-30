@@ -122,43 +122,52 @@ def generate_dataset(data_path: str):
     dataset.set_index('index', inplace=True)
     return dataset
 
-def plot_ex_1a(data: str) -> None:
-    df_0 = pd.read_csv('train/0.csv',sep=';')
-    df_200 = pd.read_csv('train/200.csv',sep=';')
-    df_900 = pd.read_csv('train/900.csv',sep=';')
-    df_1300 = pd.read_csv('train/1300.csv',sep=';')
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-    
+def plot_ex_1a(data: str) -> None:
+    # Load the data
+    df_0 = pd.read_csv(data + '/0.csv', sep=';')
+    df_200 = pd.read_csv(data + '/200.csv', sep=';')
+    df_900 = pd.read_csv(data + '/900.csv', sep=';')
+    df_1300 = pd.read_csv(data + '/1300.csv', sep=';')
+
+    # Set the style
+    sns.set(style="whitegrid")
+
     # Create a figure and 2x2 subplots
-    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
+    fig, axs = plt.subplots(2, 2, figsize=(14, 10))
+
+    # Define a common y-axis limit
+    y_limits = [-1.2, 1.2]
+
+    # Define titles and data
+    titles = [
+        'Early Bearing Stage',
+        'Normal Bearing Stage',
+        'Suspect Bearing Stage',
+        'Roll Element Failure Stage'
+    ]
+    data_frames = [df_0, df_200, df_900, df_1300]
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
     # Plot each DataFrame on a different subplot
-    axs[0, 0].plot(range(0, len(df_0)), df_0.b4x)
-    axs[0, 0].set_title('Plot 1: Early bearing stage')
-    axs[0, 0].set_ylim([-1.2,1.2])
-    axs[0, 0].set_ylabel("Accelaration")
-    axs[0, 0].set_xlabel("Hz")
-
-    axs[0, 1].plot(range(0, len(df_200)), df_200.b4x)
-    axs[0, 1].set_title('Plot 2: Normal bearing stage')
-    axs[0, 1].set_ylim([-1.2,1.2])
-    axs[0, 1].set_ylabel("Accelaration")
-    axs[0, 1].set_xlabel("Hz")
-
-    axs[1, 0].plot(range(0, len(df_900)), df_900.b4x)
-    axs[1, 0].set_title('Plot 3: Suspect bearing stage')
-    axs[1, 0].set_ylim([-1.2,1.2])
-    axs[1, 0].set_ylabel("Accelaration")
-    axs[1, 0].set_xlabel("Hz")
-
-    axs[1, 1].plot(range(0, len(df_1300)), df_1300.b4x)
-    axs[1, 1].set_title('Plot 4: Roll element failure stage')
-    axs[1, 1].set_ylim([-1.2,1.2])
-    axs[1, 1].set_ylabel("Accelaration")
-    axs[1, 1].set_xlabel("Hz")
+    for ax, title, df, color in zip(axs.flatten(), titles, data_frames, colors):
+        ax.plot(range(0, len(df)), df.b4x, color=color, linewidth=1.5, label='Acceleration')
+        ax.set_title(title, fontsize=14, weight='bold')
+        ax.set_ylim(y_limits)
+        ax.set_xlabel("Frequency (Hz)", fontsize=12)
+        ax.legend()
+        ax.grid(True, linestyle='--', alpha=0.7)
 
     # Adjust the layout
     plt.tight_layout()
 
+    # Add a main title
+    fig.suptitle('Bearing Stage Analysis', fontsize=16, weight='bold')
+    plt.subplots_adjust(top=0.92)
+
     # Display the plots
     plt.show()
+
