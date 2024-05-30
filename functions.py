@@ -5,18 +5,38 @@ import re
 import os
 from tqdm import tqdm
 
-def load_data_index(data_path: str, bearing: int, index: int):
+def load_data_index(data_path: str, bearing: int, index: int) -> pd.DataFrame:
+    """
+    Load and filter data for a specific bearing and index from a CSV file.
+
+    Parameters:
+    - data_path: str, the path to the directory containing the data files.
+    - bearing: int, the bearing number to filter columns by.
+    - index: int, the index of the CSV file to load.
+
+    Returns:
+    - pd.DataFrame: DataFrame containing the filtered data.
+    """
     index_file_path = f'{data_path}/{index}.csv'
     df_csv = pd.read_csv(index_file_path, delimiter=';')
 
     df_csv_filtered = df_csv[[col for col in df_csv.columns if str(bearing) in col]]
     return df_csv_filtered
 
-def spectral_flatness(x):
+def spectral_flatness(x: np.ndarray) -> float:
+    """
+    Calculate the spectral flatness of a signal.
+
+    Parameters:
+    - x: np.ndarray, the input signal.
+
+    Returns:
+    - float: The spectral flatness value.
+    """
     fft_spectrum = np.fft.fft(x)
     power_spectrum = np.abs(fft_spectrum)**2
 
-    # Vermijd nul waardes voor :
+    # Vermijd nul waardes om delen door 0 te voorkomen
     power_spectrum += 1e-10
 
     log_power_spectrum = np.log(power_spectrum)
@@ -56,8 +76,6 @@ def find_highest_number_in_filenames(folder_path):
     numbers = [int(pattern.match(file).group(1)) for file in files if pattern.match(file)]
     return max(numbers) if numbers else None
 
-
-
 def generate_dataset(data_path: str):
     bearing = 4
     data_length = find_highest_number_in_filenames(data_path)
@@ -74,11 +92,3 @@ def generate_dataset(data_path: str):
     dataset = pd.concat(dataframe_list)
     dataset.set_index('index', inplace=True)
     return dataset
-
-def main():
-    dataset = generate_dataset('train')
-    dataset.to_excel('dataset_features.xlsx')
-
-
-if __name__ == '__main__':
-    main()
