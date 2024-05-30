@@ -4,6 +4,7 @@ import scipy.stats as sp
 import re
 import os
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 
 def load_data_index(data_path: str, bearing: int, index: int) -> pd.DataFrame:
     """
@@ -23,12 +24,12 @@ def load_data_index(data_path: str, bearing: int, index: int) -> pd.DataFrame:
     df_csv_filtered = df_csv[[col for col in df_csv.columns if str(bearing) in col]]
     return df_csv_filtered
 
-def spectral_flatness(x: np.ndarray) -> float:
+def spectral_flatness(x: pd.Series) -> float:
     """
     Calculate the spectral flatness of a signal.
 
     Parameters:
-    - x: np.ndarray, the input signal.
+    - x: pd.Series, the input signal.
 
     Returns:
     - float: The spectral flatness value.
@@ -47,9 +48,17 @@ def spectral_flatness(x: np.ndarray) -> float:
 
     return spectral_flatness_result
 
+def get_features(df: pd.DataFrame) -> dict:
+    """
+    Extract statistical features from a DataFrame.
 
+    Parameters:
+    - df: pd.DataFrame, the input DataFrame containing the data.
 
-def get_features(df: pd.DataFrame):
+    Returns:
+    - dict: A dictionary of extracted features.
+    """
+
     features = {
         'mean_x': df.iloc[:, 0].mean(),
         'mean_y': df.iloc[:, 1].mean(),
@@ -70,13 +79,33 @@ def get_features(df: pd.DataFrame):
     }
     return features
 
-def find_highest_number_in_filenames(folder_path):
+def find_highest_number_in_filenames(folder_path: str) -> int:
+    """
+    Find the highest numerical filename in a folder.
+
+    Parameters:
+    - folder_path: str, the path to the folder containing the files.
+
+    Returns:
+    - int: The highest numerical filename or None if no files match the pattern.
+    """
+
     files = os.listdir(folder_path)
     pattern = re.compile(r'^(\d+)\.csv$')
     numbers = [int(pattern.match(file).group(1)) for file in files if pattern.match(file)]
     return max(numbers) if numbers else None
 
 def generate_dataset(data_path: str):
+    """
+    Generate a dataset by loading, processing, and extracting features from CSV files.
+
+    Parameters:
+    - data_path: str, the path to the directory containing the data files.
+
+    Returns:
+    - pd.DataFrame: DataFrame containing the aggregated features from all files.
+    """
+
     bearing = 4
     data_length = find_highest_number_in_filenames(data_path)
     if data_length is None:
@@ -92,3 +121,44 @@ def generate_dataset(data_path: str):
     dataset = pd.concat(dataframe_list)
     dataset.set_index('index', inplace=True)
     return dataset
+
+def plot_ex_1a(data: str) -> None:
+    df_0 = pd.read_csv('train/0.csv',sep=';')
+    df_200 = pd.read_csv('train/200.csv',sep=';')
+    df_900 = pd.read_csv('train/900.csv',sep=';')
+    df_1300 = pd.read_csv('train/1300.csv',sep=';')
+
+    
+    # Create a figure and 2x2 subplots
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
+
+    # Plot each DataFrame on a different subplot
+    axs[0, 0].plot(range(0, len(df_0)), df_0.b4x)
+    axs[0, 0].set_title('Plot 1: Early bearing stage')
+    axs[0, 0].set_ylim([-1.2,1.2])
+    axs[0, 0].set_ylabel("Accelaration")
+    axs[0, 0].set_xlabel("Hz")
+
+    axs[0, 1].plot(range(0, len(df_200)), df_200.b4x)
+    axs[0, 1].set_title('Plot 2: Normal bearing stage')
+    axs[0, 1].set_ylim([-1.2,1.2])
+    axs[0, 1].set_ylabel("Accelaration")
+    axs[0, 1].set_xlabel("Hz")
+
+    axs[1, 0].plot(range(0, len(df_900)), df_900.b4x)
+    axs[1, 0].set_title('Plot 3: Suspect bearing stage')
+    axs[1, 0].set_ylim([-1.2,1.2])
+    axs[1, 0].set_ylabel("Accelaration")
+    axs[1, 0].set_xlabel("Hz")
+
+    axs[1, 1].plot(range(0, len(df_1300)), df_1300.b4x)
+    axs[1, 1].set_title('Plot 4: Roll element failure stage')
+    axs[1, 1].set_ylim([-1.2,1.2])
+    axs[1, 1].set_ylabel("Accelaration")
+    axs[1, 1].set_xlabel("Hz")
+
+    # Adjust the layout
+    plt.tight_layout()
+
+    # Display the plots
+    plt.show()
