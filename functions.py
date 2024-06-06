@@ -5,6 +5,7 @@ import re
 import os
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 def load_data_index(data_path: str, bearing: int, index: int) -> pd.DataFrame:
     """
@@ -118,15 +119,14 @@ def generate_dataset(data_path: str):
         features = get_features(df)
         features['index'] = index
         dataframe_list.append(pd.DataFrame(features, index=[index]))
-    dataset = pd.concat(dataframe_list)
+    df = pd.concat(dataframe_list)
+    classification = pd.read_csv(data_path + '/bearing_conditions.csv', delimiter=';')
+    dataset = pd.concat([df, classification], axis=1)
     dataset.set_index('index', inplace=True)
+
     return dataset
 
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-def plot_ex_1a(data: str) -> None:
+def plot_ex_1a(data: str, show_plot: bool) -> None:
     # Load the data
     df_0 = pd.read_csv(data + '/0.csv', sep=';')
     df_200 = pd.read_csv(data + '/200.csv', sep=';')
@@ -167,7 +167,15 @@ def plot_ex_1a(data: str) -> None:
     # Add a main title
     fig.suptitle('Bearing Stage Analysis', fontsize=16, weight='bold')
     plt.subplots_adjust(top=0.92)
+    plt.savefig('plot_ex_1a.png')
 
     # Display the plots
-    plt.show()
+    if show_plot:
+        plt.show()
+    else:
+        plt.close()
 
+def plot_scatter_matrix(df: pd.DataFrame) -> None:
+
+    sns.pairplot(df, hue='b4_state')
+    plt.show()
