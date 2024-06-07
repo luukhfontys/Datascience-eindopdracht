@@ -41,11 +41,11 @@ model.add(Conv1D(filters=256, kernel_size=3, activation='relu'))
 model.add(MaxPooling1D(pool_size=2))
 
 # LSTM layers
-model.add(LSTM(100, return_sequences=True))
-model.add(LSTM(100))
+model.add(LSTM(300, return_sequences=True))
+model.add(LSTM(300))
 
 # Fully connected layers
-model.add(Dense(100, activation='relu'))
+model.add(Dense(300, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(4, activation='softmax'))  # Adjusted to 5 wear stages
 
