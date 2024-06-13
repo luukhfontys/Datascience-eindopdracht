@@ -5,6 +5,7 @@ import re
 import os
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+import networkx as nx
 import seaborn as sns
 
 def load_data_index(data_path: str, bearing: int, index: int) -> pd.DataFrame:

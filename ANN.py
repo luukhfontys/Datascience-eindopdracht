@@ -1,9 +1,12 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential # type: ignore
 from tensorflow.keras.layers import Conv1D, MaxPooling1D, LSTM, Dense, Dropout # type: ignore
+from tensorflow.keras.utils import plot_model
+import networkx as nx
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from ann_visualizer.visualize import ann_viz;
 from functions import *
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -21,9 +24,10 @@ if gpus:
         
 model = Sequential()
 
-# Convolutional layers
+# Hidden layers
 model.add(Dense(10, input_dim=19, activation='relu'))
 
+# Output layer
 model.add(Dense(5, activation='softmax'))
 
 # Compile the model
@@ -31,6 +35,7 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 
 # Print the model summary
 print(model.summary())
+
 
 dataset = pd.read_excel('dataset_features.xlsx')
 
@@ -51,5 +56,5 @@ model.fit(X_train, y_train, epochs=50, batch_size=32, validation_split=0.2)
 
 loss, accuracy = model.evaluate(X_test, y_test)
 print(f'Test loss: {loss:.4f}, Test accuracy: {accuracy:.4f}')
-
+ann_viz(model, title="")
 x=1

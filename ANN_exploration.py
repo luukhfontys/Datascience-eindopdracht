@@ -7,6 +7,8 @@ from sklearn.model_selection import train_test_split
 from itertools import product
 from time import time
 from tqdm import tqdm
+from tensorflow.keras.utils import plot_model
+import networkx as nx
 import os
 from functions import *
 
@@ -66,7 +68,7 @@ results = []
 
 start_time = time()
 
-combinations = list(product(range(min_neurons, max_neurons + 1), repeat=2))
+combinations = [(i, '-') for i in range(min_neurons, max_neurons + 1)] + list(product(range(min_neurons, max_neurons + 1), repeat=2))
 
 # Use tqdm to wrap the combined iterator
 for neurons1, neurons2 in tqdm(combinations, desc="Training models"):
@@ -95,4 +97,4 @@ results_df = pd.DataFrame(results, columns=['Neurons_Layer1', 'Neurons_Layer2', 
 
 results_df.to_excel(f'model_results_{end_time}m.xlsx', index=False)
 
-os.system("shutdown /s /t 1") # Uncomment to shutdown the computer after training is complete
+#os.system("shutdown /s /t 1") # Uncomment to shutdown the computer after training is complete
