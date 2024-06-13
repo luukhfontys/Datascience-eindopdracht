@@ -95,4 +95,4 @@ results_df = pd.DataFrame(results, columns=['Neurons_Layer1', 'Neurons_Layer2', 
 
 results_df.to_excel(f'model_results_{end_time}m.xlsx', index=False)
 
-x = 1
+os.system("shutdown /s /t 1") # Uncomment to shutdown the computer after training is complete
