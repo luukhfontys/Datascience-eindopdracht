@@ -36,7 +36,7 @@ def build_model(hidden_layers, input_dim):
         model.add(Dense(units, activation='relu'))
     
     # Output layer
-    model.add(Dense(5, activation='softmax'))  # Adjusted to 5 output classes
+    model.add(Dense(5, activation='softmax'))
     
     # Compile the model
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
