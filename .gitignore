@@ -7,6 +7,7 @@ __pycache__/
 *.so
 train/*.csv
 data/*.csv
+train/*.csv
 # Distribution / packaging
 .Python
 build/
