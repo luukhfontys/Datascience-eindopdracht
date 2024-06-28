@@ -3,16 +3,28 @@ from tensorflow.keras.models import Sequential # type: ignore
 from tensorflow.keras.layers import Conv1D, MaxPooling1D, LSTM, Dense, Dropout # type: ignore
 import pandas as pd
 from functions import *
+from sklearn.preprocessing import StandardScaler
 
 def collect_X_train_CNN_LSTM():
-    data_path = 'train'
+    data_path = 'data'
     X_train_list = []
     for i in range(0, 1482):
         data = load_data_index(data_path, 4, i)
+        
         X_train_list.append(data)
         
     X_train = np.array(X_train_list)
     
+    # Reshape X_train to 2D array (samples * time_steps, features)
+    num_samples, num_time_steps, num_features = X_train.shape
+    X_train_reshaped = X_train.reshape(-1, num_features)
+    
+    # Standardize the reshaped data
+    scaler = StandardScaler()
+    X_train_reshaped = scaler.fit_transform(X_train_reshaped)
+    
+    # Reshape back to original shape
+    X_train = X_train_reshaped.reshape(num_samples, num_time_steps, num_features)
     return X_train
 
 
@@ -41,11 +53,11 @@ model.add(Conv1D(filters=256, kernel_size=3, activation='relu'))
 model.add(MaxPooling1D(pool_size=2))
 
 # LSTM layers
-model.add(LSTM(300, return_sequences=True))
-model.add(LSTM(300))
+model.add(LSTM(100, return_sequences=True))
+model.add(LSTM(100))
 
 # Fully connected layers
-model.add(Dense(300, activation='relu'))
+model.add(Dense(100, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(4, activation='softmax'))  # Adjusted to 5 wear stages
 
@@ -56,7 +68,7 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 model.summary()
 
 X_train = collect_X_train_CNN_LSTM()
-y_train = pd.read_csv('train/bearing_conditions.csv', delimiter=';')['b4_state'].to_numpy()[:1482]
+y_train = pd.read_csv('data/bearing_conditions.csv', delimiter=';')['b4_state'].to_numpy()[:1482]
 
 
 history = model.fit(X_train, y_train, epochs=30, batch_size=32, validation_split=0.2)

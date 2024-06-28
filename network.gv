@@ -9,70 +9,70 @@ digraph g {
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 		2
 		label="
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 		3
 		label="
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 		4
 		label="
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 		5
 		label="
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 		6
 		label="
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 		7
 		label="
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 		8
 		label="
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 		9
 		label="
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 		10
 		label="
 
 
 
-Input Layer (+9)"
+Input Layer (+8)"
 		rank=same
 	}
 	1 -> 11
@@ -178,7 +178,7 @@ Input Layer (+9)"
 	subgraph cluster_1 {
 		color=white
 		rank=same
-		label="" labeljust=right labelloc=b
+		label=" (+1)" labeljust=right labelloc=b
 		11 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
 		12 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
 		13 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
@@ -240,16 +240,99 @@ Input Layer (+9)"
 	18 -> 25
 	19 -> 25
 	20 -> 25
+	11 -> 26
+	12 -> 26
+	13 -> 26
+	14 -> 26
+	15 -> 26
+	16 -> 26
+	17 -> 26
+	18 -> 26
+	19 -> 26
+	20 -> 26
+	11 -> 27
+	12 -> 27
+	13 -> 27
+	14 -> 27
+	15 -> 27
+	16 -> 27
+	17 -> 27
+	18 -> 27
+	19 -> 27
+	20 -> 27
+	11 -> 28
+	12 -> 28
+	13 -> 28
+	14 -> 28
+	15 -> 28
+	16 -> 28
+	17 -> 28
+	18 -> 28
+	19 -> 28
+	20 -> 28
+	subgraph cluster_2 {
+		color=white
+		rank=same
+		label="" labeljust=right labelloc=b
+		21 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
+		22 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
+		23 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
+		24 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
+		25 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
+		26 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
+		27 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
+		28 [color="#3498db" fontcolor="#3498db" shape=circle style=filled]
+	}
+	21 -> 29
+	22 -> 29
+	23 -> 29
+	24 -> 29
+	25 -> 29
+	26 -> 29
+	27 -> 29
+	28 -> 29
+	21 -> 30
+	22 -> 30
+	23 -> 30
+	24 -> 30
+	25 -> 30
+	26 -> 30
+	27 -> 30
+	28 -> 30
+	21 -> 31
+	22 -> 31
+	23 -> 31
+	24 -> 31
+	25 -> 31
+	26 -> 31
+	27 -> 31
+	28 -> 31
+	21 -> 32
+	22 -> 32
+	23 -> 32
+	24 -> 32
+	25 -> 32
+	26 -> 32
+	27 -> 32
+	28 -> 32
+	21 -> 33
+	22 -> 33
+	23 -> 33
+	24 -> 33
+	25 -> 33
+	26 -> 33
+	27 -> 33
+	28 -> 33
 	subgraph cluster_output {
 		node [color="#2ecc71" fontcolor="#2ecc71" shape=circle style=filled]
 		color=white
 		rank=same
 		labeljust=1
-		21 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
-		22 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
-		23 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
-		24 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
-		25 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
+		29 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
+		30 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
+		31 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
+		32 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
+		33 [color="#e74c3c" fontcolor="#e74c3c" shape=circle style=filled]
 		label="Output Layer" labelloc=bottom
 	}
 	arrowShape=none

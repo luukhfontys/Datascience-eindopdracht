@@ -8,7 +8,6 @@ from itertools import product
 from time import time
 from tqdm import tqdm
 from tensorflow.keras.utils import plot_model
-import networkx as nx
 import os
 from functions import *
 
@@ -47,8 +46,8 @@ def build_model(hidden_layers, input_dim):
 dataset = pd.read_excel('dataset_features.xlsx')
 
 # Extract features and target variable
-X = dataset[['index', 'mean_x', 'mean_y', 'std_x', 'std_y', 'rms_x', 'rms_y', 'kurtosis_x', 'kurtosis_y', 'variance_x', 'variance_y',
-       'crest_factor_x', 'crest_factor_y', 'skewness_x', 'skewness_y', 'spectral_flatness_x', 'spectral_flatness_y', 'sample_entropy_x',
+X = dataset[['mean_x', 'mean_y', 'rms_x', 'rms_y', 'variance_x', 'variance_y',
+            'spectral_flatness_x', 'spectral_flatness_y', 'sample_entropy_x',
        'sample_entropy_y']]
 y = dataset['b4_state']
 
@@ -62,24 +61,23 @@ X_test = scaler.transform(X_test)
 
 # Define range for number of neurons in hidden layers
 min_neurons = 5
-max_neurons = 19
+max_neurons = 9
 
 results = []
 
 start_time = time()
 
-combinations = [(i, '-') for i in range(min_neurons, max_neurons + 1)] + list(product(range(min_neurons, max_neurons + 1), repeat=2))
+combinations = list(product(range(min_neurons, max_neurons + 1), repeat=5)) + list(product(range(min_neurons, max_neurons + 1), repeat=1)) + list(product(range(min_neurons, max_neurons + 1), repeat=2)) + list(product(range(min_neurons, max_neurons + 1), repeat=3)) + list(product(range(min_neurons, max_neurons + 1), repeat=4))
+
+accuracy_list = []
+
+loss_list = []
 
 # Use tqdm to wrap the combined iterator
-for neurons1, neurons2 in tqdm(combinations, desc="Training models"):
-    if neurons2 == '-':
-        tqdm.write(f"Training model with hidden layer: [{neurons1}]")
-        # Build the model with one hidden layer
-        model = build_model([neurons1], input_dim=X_train.shape[1])
-    else:
-        tqdm.write(f"Training model with hidden layers: [{neurons1}, {neurons2}]")
-        # Build the model with two hidden layers
-        model = build_model([neurons1, neurons2], input_dim=X_train.shape[1])
+for index, comb in tqdm(enumerate(combinations), total=len(combinations)):
+    tqdm.write(f"Training model with hidden layers: {comb}")
+    # Build the model with one hidden layer
+    model = build_model(comb, input_dim=X_train.shape[1])
     
     # Train the model
     model.fit(X_train, y_train, epochs=50, batch_size=32, validation_split=0.2, verbose=0)
@@ -87,14 +85,16 @@ for neurons1, neurons2 in tqdm(combinations, desc="Training models"):
     # Evaluate the model on test data
     loss, accuracy = model.evaluate(X_test, y_test, verbose=0)
     tqdm.write(f'Test loss: {loss:.4f}, Test accuracy: {accuracy:.4f}')
+    accuracy_list.append(accuracy)
+    loss_list.append(loss)
     
-    # Append the results
-    results.append([neurons1, neurons2 if neurons2 != '-' else '-', loss, accuracy])
+
+sol_dict = {'accuracy': accuracy_list, 'loss': loss_list, 'hidden_layers': combinations}
+df = pd.DataFrame(sol_dict)
+df.to_excel('results.xlsx')
 
 end_time = round((time() - start_time) / 60, 4)
         
-results_df = pd.DataFrame(results, columns=['Neurons_Layer1', 'Neurons_Layer2', 'Test_Loss', 'Test_Accuracy'])
-
-results_df.to_excel(f'model_results_{end_time}m.xlsx', index=False)
+x = 1
 
 #os.system("shutdown /s /t 1") # Uncomment to shutdown the computer after training is complete

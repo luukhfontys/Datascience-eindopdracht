@@ -25,7 +25,9 @@ if gpus:
 model = Sequential()
 
 # Hidden layers
-model.add(Dense(10, input_dim=19, activation='relu'))
+model.add(Dense(11, input_dim=18, activation='relu'))
+
+model.add(Dense(8, activation='relu'))
 
 # Output layer
 model.add(Dense(5, activation='softmax'))
@@ -39,7 +41,7 @@ print(model.summary())
 
 dataset = pd.read_excel('dataset_features.xlsx')
 
-X = dataset[['index', 'mean_x', 'mean_y', 'std_x', 'std_y', 'rms_x', 'rms_y', 'kurtosis_x', 'kurtosis_y', 'variance_x', 'variance_y',
+X = dataset[['mean_x', 'mean_y', 'std_x', 'std_y', 'rms_x', 'rms_y', 'kurtosis_x', 'kurtosis_y', 'variance_x', 'variance_y',
        'crest_factor_x', 'crest_factor_y', 'skewness_x', 'skewness_y', 'spectral_flatness_x', 'spectral_flatness_y', 'sample_entropy_x',
        'sample_entropy_y']]
 
@@ -52,7 +54,7 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 
-model.fit(X_train, y_train, epochs=50, batch_size=32, validation_split=0.2)
+model.fit(X_train, y_train, epochs=100, batch_size=32, validation_split=0.2)
 
 loss, accuracy = model.evaluate(X_test, y_test)
 print(f'Test loss: {loss:.4f}, Test accuracy: {accuracy:.4f}')
